@@ -1,7 +1,12 @@
 package modelos;
 
+import lombok.Data;
+
+@Data
 public class Incidente {
     private long id;
     private String descripcion;
-    boolean resuelto = false;
+    private Situacion situacion = new Ingresado();
+    private Cliente cliente;
+    private Tecnico tecnico;
 }
