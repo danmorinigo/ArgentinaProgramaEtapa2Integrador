@@ -1,9 +1,10 @@
 package org.example;
 
-import modelos.Aplicacion;
-import modelos.Especialidad;
-import modelos.Sistema;
-import modelos.Tecnico;
+import modelos.SoporteTecnico.Aplicacion;
+import modelos.SoporteTecnico.Especialidad;
+import modelos.SoporteTecnico.Referencia;
+import modelos.SoporteTecnico.Sistema;
+import modelos.Persona.Tecnico;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,13 +22,17 @@ public class Main {
         t.setNombre("Daniel");
         System.out.println(t.getNombre());
 
+        EntityTransaction tx = em.getTransaction();
+
         for(Especialidad e : especialidades){
-            EntityTransaction tx = em.getTransaction();
-            tx.begin();
-            em.persist(e);
-            tx.commit();
+            //tx.begin();
+            //em.persist(e);
+            //tx.commit();
             t.agregarEspecialidad(e);
         }
+        tx.begin();
+        em.persist(t);
+        tx.commit();
         for(Especialidad e : t.getEspecialidades()){
             System.out.println(e);
         }
@@ -40,18 +45,27 @@ public class Main {
     }
     private static HashSet<Especialidad> cargarEspecialidades(){
         HashSet<Especialidad> especialidades = new HashSet<>();
-        Especialidad w = new Sistema("Windows");
-        Especialidad l = new Sistema("Linux");
-        Especialidad w2 = new Sistema("Windows");
-        Especialidad a1 = new Aplicacion("PS");
-        Especialidad a2 = new Aplicacion("JAVA");
-        Especialidad a3 = new Aplicacion("PS");
-        especialidades.add(w);
-        especialidades.add(l);
-        especialidades.add(w2);
-        especialidades.add(a1);
-        especialidades.add(a2);
-        especialidades.add(a3);
+        //Primero creo Referencias
+        Referencia ref1 = new Referencia("Windows");
+        Referencia ref2 = new Referencia("Linux");
+        Referencia ref3 = new Referencia("Windows");
+        Referencia ref4 = new Referencia("PhotoShop");
+        Referencia ref5 = new Referencia("Java");
+        Referencia ref6 = new Referencia("SmallTalk");
+        //Creo especialidades
+        Especialidad e1 = new Sistema(ref1);
+        Especialidad e2 = new Sistema(ref2);
+        Especialidad e3 = new Sistema(ref3);
+        Especialidad e4 = new Aplicacion(ref4);
+        Especialidad e5 = new Aplicacion(ref5);
+        Especialidad e6 = new Aplicacion(ref6);
+        //Junto especialidades
+        especialidades.add(e1);
+        especialidades.add(e2);
+        especialidades.add(e3);
+        especialidades.add(e4);
+        especialidades.add(e5);
+        especialidades.add(e6);
         return especialidades;
     }
 }

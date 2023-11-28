@@ -1,6 +1,9 @@
 package modelos;
 
 import lombok.Data;
+import modelos.Estado.Ingresado;
+import modelos.Estado.Situacion;
+import modelos.Persona.*;
 
 @Data
 public class Incidente {
