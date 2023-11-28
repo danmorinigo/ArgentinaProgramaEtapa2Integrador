@@ -1,5 +1,6 @@
 package org.example;
 
+import Controller.ReferenciasController;
 import modelos.Persona.Cliente;
 import modelos.SoporteTecnico.*;
 import modelos.Persona.Tecnico;
@@ -9,11 +10,59 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
         EntityManager em = getEntityManager();
+
+        ReferenciasController rc = new ReferenciasController();
+        rc.getcomunicacionDB().setEm(em);
+
+        Scanner teclado = new Scanner(System.in);
+        int opcion;
+        long id;
+        do{
+            menuPrincipal();
+            System.out.print("Elija opcion: ");
+            opcion = teclado.nextInt();
+            switch (opcion){
+                case 1:
+                    System.out.println("AGREGANDO REFERENCIA:");
+                    System.out.print("\tIngrese nombre: ");
+                    String nombre = teclado.next();
+                    rc.agregarReferencia(nombre);
+                    break;
+                case 2:
+                    System.out.println("REFERENCIAS EN DB:");
+                    for(Referencia r : rc.referenciasGuardadas()){
+                        System.out.println("\t" + r);
+                    }
+                    break;
+                case 3:
+                    System.out.println("AGREGANDO SERVICIO:");
+                    for(Referencia r : rc.referenciasGuardadas()){
+                        System.out.println("\t" + r);
+                    }
+                    System.out.print("\tIngrese codigo: ");
+                    long codigo = teclado.nextInt();
+                    rc.agregarServicio(codigo);
+                    break;
+                case 4:
+                    System.out.println("SERVICIOS QUE BRINDAMOS");
+                    for(Servicio s: rc.serviciosGuardados()){
+                        System.out.println("\t" + s);
+                    }
+                    break;
+
+
+                default:
+                    System.out.println("Opcion no válida o Saliendo...");
+            }
+        }while(opcion != 0);
+        despedida();
+        /*
 
         Set<Referencia> referencias = cargarReferencias();
         Set<Especialidad> especialidades = cargarEspecialidades(referencias);
@@ -35,7 +84,21 @@ public class Main {
         tx.begin();
         em.persist(c);
         tx.commit();
+         */
     }
+
+    private static void despedida() {
+        System.out.println("BAY BAY!");
+    }
+
+    private static void menuPrincipal() {
+        System.out.println("MENU PRINCIPAL");
+        System.out.println("\t1-Agregar REFERENCIA");
+        System.out.println("\t2-Mostrar REFERENCIAS GUARDADAS");
+        System.out.println("\t3-Agregar SERVICIO");
+        System.out.println("\t4-Mostrar SERVICIOS");
+    }
+
 
     private static HashSet<Servicio> cargarServicios(Set<Referencia> referencias) {
         HashSet<Servicio> servicios = new HashSet<>();

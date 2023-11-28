@@ -9,7 +9,8 @@ import javax.persistence.*;
 @Table(name = "referencia")
 public class Referencia {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "referencia_id_seq")
+    @SequenceGenerator(name = "referencia_id_seq", sequenceName = "referencia_id_seq", allocationSize = 1)
     @Column(name = "id")
     private long id;
     @Column(name = "nombre")

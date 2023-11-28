@@ -1,6 +1,7 @@
 package modelos.Persona;
 
 import lombok.Data;
+import modelos.Incidente;
 import modelos.SoporteTecnico.Especialidad;
 import modelos.SoporteTecnico.Servicio;
 
@@ -15,6 +16,8 @@ public class Cliente extends Persona {
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Servicio> servicios = new HashSet<>();
 
+    @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private Incidente incidente;
     public Cliente(){
     }
     public void agregarServicio(Servicio servicio){

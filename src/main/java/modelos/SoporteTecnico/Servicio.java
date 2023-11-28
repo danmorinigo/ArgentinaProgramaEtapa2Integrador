@@ -1,6 +1,7 @@
 package modelos.SoporteTecnico;
 
 import lombok.Data;
+import modelos.Incidente;
 import modelos.Persona.Cliente;
 import modelos.Persona.Tecnico;
 
@@ -17,12 +18,14 @@ public class Servicio implements Comparable{
     @SequenceGenerator(name = "servicio_id_seq", sequenceName = "servicio_id_seq", allocationSize = 1)
     @Column(name = "id")
     private long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "referencia_id", referencedColumnName = "id")
     private Referencia referencia;
 
     @ManyToMany(mappedBy = "servicios", cascade = CascadeType.ALL)
     private Set<Cliente> clientes = new HashSet<>();
+    @OneToOne(mappedBy = "servicioConProblemas", cascade = CascadeType.ALL)
+    private Incidente incidente;
     public Servicio(Referencia referencia){
         this.referencia = referencia;
     }
