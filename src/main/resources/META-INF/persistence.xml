@@ -9,8 +9,10 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
         <class>modelos.SoporteTecnico.Aplicacion</class>
         <class>modelos.SoporteTecnico.Sistema</class>
         <class>modelos.SoporteTecnico.Referencia</class>
+        <class>modelos.SoporteTecnico.Servicio</class>
         <class>modelos.Persona.Persona</class>
         <class>modelos.Persona.Tecnico</class>
+        <class>modelos.Persona.Cliente</class>
 
 
         <properties>

@@ -1,9 +1,7 @@
 package org.example;
 
-import modelos.SoporteTecnico.Aplicacion;
-import modelos.SoporteTecnico.Especialidad;
-import modelos.SoporteTecnico.Referencia;
-import modelos.SoporteTecnico.Sistema;
+import modelos.Persona.Cliente;
+import modelos.SoporteTecnico.*;
 import modelos.Persona.Tecnico;
 
 import javax.persistence.EntityManager;
@@ -17,34 +15,44 @@ public class Main {
     public static void main(String[] args) {
         EntityManager em = getEntityManager();
 
-        Set<Especialidad> especialidades = cargarEspecialidades();
+        Set<Referencia> referencias = cargarReferencias();
+        Set<Especialidad> especialidades = cargarEspecialidades(referencias);
+        Set<Servicio> servicios = cargarServicios(referencias);
+
         Tecnico t = new Tecnico();
         t.setNombre("Daniel");
-        System.out.println(t.getNombre());
-
         EntityTransaction tx = em.getTransaction();
-
-        for(Especialidad e : especialidades){
-            //tx.begin();
-            //em.persist(e);
-            //tx.commit();
-            t.agregarEspecialidad(e);
-        }
+        especialidades.forEach(t::agregarEspecialidad);
         tx.begin();
         em.persist(t);
         tx.commit();
-        for(Especialidad e : t.getEspecialidades()){
-            System.out.println(e);
+
+        Cliente c = new Cliente();
+        c.setNombre("Federrico");
+        for(Servicio s : servicios){
+            c.agregarServicio(s);
         }
+        tx.begin();
+        em.persist(c);
+        tx.commit();
     }
+
+    private static HashSet<Servicio> cargarServicios(Set<Referencia> referencias) {
+        HashSet<Servicio> servicios = new HashSet<>();
+        for(Referencia r: referencias){
+            servicios.add(new Servicio(r));
+        }
+        return servicios;
+    }
+
     public static EntityManager getEntityManager(){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory(
                         "JPA_PU");
         EntityManager manager = factory.createEntityManager();
         return manager;
     }
-    private static HashSet<Especialidad> cargarEspecialidades(){
-        HashSet<Especialidad> especialidades = new HashSet<>();
+    private static HashSet<Referencia> cargarReferencias(){
+        HashSet<Referencia> referencias = new HashSet<>();
         //Primero creo Referencias
         Referencia ref1 = new Referencia("Windows");
         Referencia ref2 = new Referencia("Linux");
@@ -52,20 +60,27 @@ public class Main {
         Referencia ref4 = new Referencia("PhotoShop");
         Referencia ref5 = new Referencia("Java");
         Referencia ref6 = new Referencia("SmallTalk");
-        //Creo especialidades
-        Especialidad e1 = new Sistema(ref1);
-        Especialidad e2 = new Sistema(ref2);
-        Especialidad e3 = new Sistema(ref3);
-        Especialidad e4 = new Aplicacion(ref4);
-        Especialidad e5 = new Aplicacion(ref5);
-        Especialidad e6 = new Aplicacion(ref6);
-        //Junto especialidades
-        especialidades.add(e1);
-        especialidades.add(e2);
-        especialidades.add(e3);
-        especialidades.add(e4);
-        especialidades.add(e5);
-        especialidades.add(e6);
+        referencias.add(ref1);
+        referencias.add(ref2);
+        referencias.add(ref3);
+        referencias.add(ref4);
+        referencias.add(ref5);
+        referencias.add(ref6);
+        return referencias;
+    }
+    private static HashSet<Especialidad> cargarEspecialidades(Set<Referencia> referencias){
+        HashSet<Especialidad> especialidades = new HashSet<>();
+        int i = 0;
+        Especialidad e;
+        for(Referencia r: referencias){
+            if( i % 2 == 0){
+                e = new Sistema(r);
+            }else{
+                e = new Aplicacion(r);
+            }
+            especialidades.add(e);
+            i++;
+        }
         return especialidades;
     }
 }
