@@ -1,7 +1,9 @@
 package org.example;
 
+import Controller.PersonaController;
 import Controller.ReferenciasController;
 import modelos.Persona.Cliente;
+import modelos.Persona.Persona;
 import modelos.SoporteTecnico.*;
 import modelos.Persona.Tecnico;
 
@@ -19,6 +21,9 @@ public class Main {
 
         ReferenciasController rc = new ReferenciasController();
         rc.getcomunicacionDB().setEm(em);
+
+        PersonaController pc = new PersonaController();
+        pc.getcomunicacionDB().setEm(em);
 
         Scanner teclado = new Scanner(System.in);
         int opcion;
@@ -54,6 +59,22 @@ public class Main {
                     for(Servicio s: rc.serviciosGuardados()){
                         System.out.println("\t" + s);
                     }
+                    break;
+                case 5:
+                    System.out.println("AGREGANDO CLIENTE:");
+                    System.out.print("\tNombre:");
+                    String n = teclado.next();
+                    Persona persona = new Cliente();
+                    persona.setNombre(n);
+                    pc.agregarPersona(persona);
+                    break;
+                case 6:
+                    System.out.println("AGREGANDO TECNICO:");
+                    System.out.print("\tNombre:");
+                    String n2 = teclado.next();
+                    Persona persona2 = new Tecnico();
+                    persona2.setNombre(n2);
+                    pc.agregarPersona(persona2);
                     break;
 
 
@@ -97,6 +118,8 @@ public class Main {
         System.out.println("\t2-Mostrar REFERENCIAS GUARDADAS");
         System.out.println("\t3-Agregar SERVICIO");
         System.out.println("\t4-Mostrar SERVICIOS");
+        System.out.println("\t5-Agregar CLIENTE");
+        System.out.println("\t6-Agregar TECNICO");
     }
 
 
